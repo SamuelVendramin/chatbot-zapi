@@ -9,30 +9,33 @@ app.get("/", (req, res) => {
 app.post("/webhook", (req, res) => {
     console.log("Recebido da Z-API:", JSON.stringify(req.body, null, 2));
 
-    const text = req.body?.texto?.mensagem?.toLowerCase() || "";
+    const mensagemOriginal = req.body?.texto?.mensagem || "";
+    console.log("Mensagem recebida bruta:", mensagemOriginal);
+    console.log("Tamanho da mensagem:", mensagemOriginal.length);
+
+    const text = mensagemOriginal.toLowerCase().trim();
+
     let resposta = "";
 
-    if (text.includes("oi") || text.includes("olá")) {
+    if (text === "oi" || text === "olá") {
         resposta = `Olá! Seja bem-vindo à *Casa Limpa*! Escolha uma opção:
 1 - Ver lista de produtos
 2 - Fazer um pedido
 3 - Falar com um atendente humano
 4 - Ver horário de funcionamento`;
-    } else if (text.includes("1")) {
+    } else if (text === "1") {
         resposta = "Você pode acessar nossa lista de produtos aqui: https://seusite.com/catalogo";
-    } else if (text.includes("2")) {
+    } else if (text === "2") {
         resposta = "Certo! Me diga qual produto você quer e a quantidade.";
-    } else if (text.includes("3")) {
+    } else if (text === "3") {
         resposta = "Aguarde um momento, vamos te encaminhar para um atendente.";
-    } else if (text.includes("4")) {
+    } else if (text === "4") {
         resposta = "Nosso horário de atendimento é de segunda a sexta das 8h às 18h e sábado das 8h às 13h.";
     } else {
         resposta = "Desculpe, não entendi. Envie 'oi' para ver as opções.";
     }
 
     console.log("Resposta enviada para a Z-API:", resposta);
-
-    // Testando outro formato de resposta que a Z-API pode aceitar
     res.send({ mensagem: resposta });
 });
 
