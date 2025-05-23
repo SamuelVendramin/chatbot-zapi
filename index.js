@@ -1,54 +1,61 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
+const express = require("express");
+const axios = require("axios");
 const app = express();
-const PORT = process.env.PORT || 10000;
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-const instanceId = '3E1972D7C998601EABD4BAA23289AB67'; // substitua se necessário
-const token = 'DBF621BD40B7A09D8D0B3C4...'; // substitua pelo seu token correto
+const instanceId = "3E1972D7C998601EABD4BAA23289AB67"; // ID da instância da Z-API
+const token = "DBF621BD40B7A09D8D0B3C46"; // Token da Z-API
 
-app.post('/webhook', async (req, res) => {
-  const body = req.body;
-  console.log('Mensagem recebida bruta:', body?.text?.message || '');
-  const mensagem = (body?.text?.message || '').trim().toLowerCase();
-  const telefone = body?.phone;
+app.get("/", (req, res) => {
+  res.send("Servidor online da Casa Limpa");
+});
 
-  let resposta = 'Desculpe, não entendi. Envie "oi" para ver as opções.';
+app.post("/webhook", async (req, res) => {
+  const mensagemOriginal = req.body?.text?.message || "";
+  const telefone = req.body?.phone || "";
 
-  if (mensagem === 'oi') {
-resposta = "Olá! Seja bem-vindo à Casa Limpa! Escolha uma opção:\n" +
-           "1 - Ver lista de produtos\n" +
-           "2 - Fazer um pedido\n" +
-           "3 - Falar com um atendente humano\n" +
-           "4 - Ver horário de funcionamento";
+  console.log("Mensagem recebida bruta:", mensagemOriginal);
+  console.log("Tamanho da mensagem:", mensagemOriginal.length);
+
+  const texto = mensagemOriginal.toLowerCase().trim();
+  let resposta = "";
+
+  if (texto === "oi" || texto === "olá") {
+    resposta = `Olá! Seja bem-vindo à Casa Limpa! Escolha uma opção:
+1 - Ver lista de produtos
+2 - Fazer um pedido
+3 - Falar com um atendente humano
+4 - Ver horário de funcionamento`;
+  } else if (texto === "1") {
+    resposta = "Você pode acessar nossa lista de produtos aqui: https://seusite.com/catalogo";
+  } else if (texto === "2") {
+    resposta = "Certo! Me diga qual produto você quer e a quantidade.";
+  } else if (texto === "3") {
+    resposta = "Aguarde um momento, vamos te encaminhar para um atendente.";
+  } else if (texto === "4") {
+    resposta = "Nosso horário de atendimento é de segunda a sexta das 8h às 18h e sábado das 8h às 13h.";
+  } else {
+    resposta = "Desculpe, não entendi. Envie 'oi' para ver as opções.";
   }
 
-  if (telefone) {
-    try {
-      const envio = await fetch(https://api.z-api.io/instances/${instanceId}/token/${token}/send-message, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: telefone,
-          message: resposta
-        })
-      });
+  console.log("Resposta enviada para a Z-API:", resposta);
 
-      if (!envio.ok) {
-        console.error('Erro ao enviar para Z-API:', envio.status, await envio.text());
-      } else {
-        console.log('Resposta enviada para Z-API:', resposta);
-      }
-    } catch (error) {
-      console.error('Erro ao tentar enviar mensagem:', error.message);
-    }
+  try {
+    const response = await axios.post(https://api.z-api.io/instances/${instanceId}/token/${token}/send-text, {
+      phone: telefone,
+      message: resposta
+    });
+
+    console.log("Mensagem enviada com sucesso:", response.data);
+  } catch (error) {
+    console.error("Erro ao enviar para Z-API:", error.response?.data || error.message);
   }
 
   res.sendStatus(200);
 });
 
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, "0.0.0.0", () => {
   console.log(Servidor rodando na porta ${PORT});
 });
