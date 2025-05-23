@@ -7,6 +7,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
+    console.log("Recebido da Z-API:", JSON.stringify(req.body, null, 2));
+
     const message = req.body;
     const text = message?.body?.text?.toLowerCase() || "";
     const phone = message?.key?.remoteJid?.split("@")[0] || "";
@@ -34,7 +36,6 @@ app.post("/webhook", (req, res) => {
     res.send({ reply: resposta });
 });
 
-// Correção aqui: usar process.env.PORT obrigatoriamente no Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Servidor rodando na porta ${PORT}`);
