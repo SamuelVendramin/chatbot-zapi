@@ -4,11 +4,11 @@ const app = express();
 
 app.use(express.json());
 
-const instanceId = "3E1972D7C998601EABD4BAA23289AB67"; // Seu ID da instância Z-API
-const token = "DBF621BD40B7A09D8D0B3C46"; // Seu token da Z-API
+const instanceId = "3E1972D7C998601EABD4BAA23289AB67"; // ID da instância da Z-API
+const token = "DBF621BD40B7A09D8D0B3C46"; // Token da Z-API
 
 app.get("/", (req, res) => {
-  res.send("Servidor da Casa Limpa online.");
+  res.send("Servidor online da Casa Limpa");
 });
 
 app.post("/webhook", async (req, res) => {
