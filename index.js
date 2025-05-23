@@ -10,7 +10,6 @@ app.post("/webhook", (req, res) => {
     console.log("Recebido da Z-API:", JSON.stringify(req.body, null, 2));
 
     const text = req.body?.texto?.mensagem?.toLowerCase() || "";
-
     let resposta = "";
 
     if (text.includes("oi") || text.includes("olá")) {
@@ -31,7 +30,10 @@ app.post("/webhook", (req, res) => {
         resposta = "Desculpe, não entendi. Envie 'oi' para ver as opções.";
     }
 
-    res.send({ reply: resposta });
+    console.log("Resposta enviada para a Z-API:", resposta);
+
+    // Testando outro formato de resposta que a Z-API pode aceitar
+    res.send({ mensagem: resposta });
 });
 
 const PORT = process.env.PORT || 3000;
