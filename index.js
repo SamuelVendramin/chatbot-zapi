@@ -5,7 +5,6 @@ const axios = require("axios");
 const app = express();
 app.use(express.json());
 
-// Dados da instância da Z-API
 const instanceId = "3E1972D7C998601EABD4BAA23289AB67";
 const token = "DBF621BD40B7A09D8D0B3C46";
 
@@ -26,11 +25,11 @@ app.post("/webhook", async (req, res) => {
   switch (texto) {
     case "oi":
     case "olá":
-      resposta = \`Olá! Seja bem-vindo à *Casa Limpa*! Escolha uma opção:
+      resposta = `Olá! Seja bem-vindo à *Casa Limpa*! Escolha uma opção:
 1 - Ver lista de produtos
 2 - Fazer um pedido
 3 - Falar com um atendente humano
-4 - Ver horário de funcionamento\`;
+4 - Ver horário de funcionamento`;
       break;
     case "1":
       resposta = "Você pode acessar nossa lista de produtos aqui: https://seusite.com/catalogo";
@@ -51,7 +50,7 @@ app.post("/webhook", async (req, res) => {
 
   try {
     const response = await axios.post(
-      \`https://api.z-api.io/instances/\${instanceId}/token/\${token}/send-text\`,
+      `https://api.z-api.io/instances/${instanceId}/token/${token}/send-text`,
       {
         phone: telefone,
         message: resposta,
@@ -66,8 +65,7 @@ app.post("/webhook", async (req, res) => {
   res.sendStatus(200);
 });
 
-// Inicializa o servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(\`Servidor rodando na porta \${PORT}\`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
