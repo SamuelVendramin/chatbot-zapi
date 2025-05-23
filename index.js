@@ -7,14 +7,11 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
-    console.log("Recebido da Z-API:", JSON.stringify(req.body, null, 2));
-
-    const mensagemOriginal = req.body?.texto?.mensagem || "";
+    const mensagemOriginal = req.body?.text?.message || "";
     console.log("Mensagem recebida bruta:", mensagemOriginal);
     console.log("Tamanho da mensagem:", mensagemOriginal.length);
 
     const text = mensagemOriginal.toLowerCase().trim();
-
     let resposta = "";
 
     if (text === "oi" || text === "olá") {
