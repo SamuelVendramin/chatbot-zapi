@@ -18,11 +18,11 @@ app.post('/webhook', async (req, res) => {
   let resposta = 'Desculpe, não entendi. Envie "oi" para ver as opções.';
 
   if (mensagem === 'oi') {
-    resposta = "Olá! Seja bem-vindo à *Casa Limpa*! Escolha uma opção:\n +
-               1 - Ver lista de produtos\n +
-               2 - Fazer um pedido\n +
-               3 - Falar com um atendente humano\n +
-               4 - Ver horário de funcionamento";
+resposta = "Olá! Seja bem-vindo à Casa Limpa! Escolha uma opção:\n" +
+           "1 - Ver lista de produtos\n" +
+           "2 - Fazer um pedido\n" +
+           "3 - Falar com um atendente humano\n" +
+           "4 - Ver horário de funcionamento";
   }
 
   if (telefone) {
