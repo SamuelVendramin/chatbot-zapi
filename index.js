@@ -10,8 +10,7 @@ app.post("/webhook", (req, res) => {
     console.log("Recebido da Z-API:", JSON.stringify(req.body, null, 2));
 
     const message = req.body;
-    const text = message?.body?.text?.toLowerCase() || "";
-    const phone = message?.key?.remoteJid?.split("@")[0] || "";
+    const text = message?.texto?.mensagem?.toLowerCase() || message?.body?.text?.toLowerCase() || "";
 
     let resposta = "";
 
