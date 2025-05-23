@@ -1,0 +1,38 @@
+const express = require("express");
+const app = express();
+app.use(express.json());
+
+app.post("/webhook", (req, res) => {
+    const message = req.body;
+    const text = message.body?.text?.toLowerCase();
+    const phone = message.key?.remoteJid?.split("@")[0];
+
+    let resposta = "";
+
+    if (!text) {
+        resposta = "Olá! Como posso te ajudar?";
+    } else if (text.includes("oi") || text.includes("olá")) {
+        resposta = `Olá! Seja bem-vindo à *Casa Limpa*! Escolha uma opção:
+1 - Ver lista de produtos
+2 - Fazer um pedido
+3 - Falar com um atendente humano
+4 - Ver horário de funcionamento`;
+    } else if (text.includes("1")) {
+        resposta = "Você pode acessar nossa lista de produtos aqui: https://seusite.com/catalogo";
+    } else if (text.includes("2")) {
+        resposta = "Certo! Me diga qual produto você quer e a quantidade.";
+    } else if (text.includes("3")) {
+        resposta = "Aguarde um momento, vamos te encaminhar para um atendente.";
+    } else if (text.includes("4")) {
+        resposta = "Nosso horário de atendimento é de segunda a sexta das 8h às 18h e sábado das 8h às 13h.";
+    } else {
+        resposta = "Desculpe, não entendi. Envie 'oi' para ver as opções.";
+    }
+
+    res.send({ reply: resposta });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});
