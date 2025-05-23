@@ -2,16 +2,18 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
+app.get("/", (req, res) => {
+    res.send("Servidor ativo. Use a rota /webhook para integração com a Z-API.");
+});
+
 app.post("/webhook", (req, res) => {
     const message = req.body;
-    const text = message.body?.text?.toLowerCase();
-    const phone = message.key?.remoteJid?.split("@")[0];
+    const text = message?.body?.text?.toLowerCase() || "";
+    const phone = message?.key?.remoteJid?.split("@")[0] || "";
 
     let resposta = "";
 
-    if (!text) {
-        resposta = "Olá! Como posso te ajudar?";
-    } else if (text.includes("oi") || text.includes("olá")) {
+    if (text.includes("oi") || text.includes("olá")) {
         resposta = `Olá! Seja bem-vindo à *Casa Limpa*! Escolha uma opção:
 1 - Ver lista de produtos
 2 - Fazer um pedido
@@ -32,7 +34,8 @@ app.post("/webhook", (req, res) => {
     res.send({ reply: resposta });
 });
 
+// Correção aqui: usar process.env.PORT obrigatoriamente no Render
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
