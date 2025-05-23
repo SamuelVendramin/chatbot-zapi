@@ -1,14 +1,14 @@
 const express = require("express");
-const fetch = require("node-fetch");
+const axios = require("axios");
 const app = express();
 
 app.use(express.json());
 
-const instanceId = "3E1972D7C998601EABD4BAA23289AB67"; // ID da instância da Z-API
-const token = "DBF621BD40B7A09D8D0B3C46"; // Token da Z-API
+const instanceId = "3E1972D7C998601EABD4BAA23289AB67"; // Seu ID da instância Z-API
+const token = "DBF621BD40B7A09D8D0B3C46"; // Seu token da Z-API
 
 app.get("/", (req, res) => {
-  res.send("Servidor online");
+  res.send("Servidor da Casa Limpa online.");
 });
 
 app.post("/webhook", async (req, res) => {
@@ -43,16 +43,12 @@ app.post("/webhook", async (req, res) => {
   console.log("Resposta enviada para a Z-API:", resposta);
 
   try {
-    await fetch(`https://api.z-api.io/instances/${instanceId}/token/${token}/send-text`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        phone: telefone,
-        message: resposta
-      })
+    await axios.post(`https://api.z-api.io/instances/${instanceId}/token/${token}/send-text`, {
+      phone: telefone,
+      message: resposta
     });
   } catch (error) {
-    console.error("Erro ao enviar mensagem para Z-API:", error);
+    console.error("Erro ao enviar para Z-API:", error.message);
   }
 
   res.sendStatus(200);
