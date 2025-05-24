@@ -5,8 +5,9 @@ const axios = require("axios");
 const app = express();
 app.use(express.json());
 
+// Configurações da sua instância Z-API
 const instanceId = "3E1972D7C998601EABD4BAA23289AB67";
-const token = "DBF621BD40B7A09D8D0B3C46";
+const token = "D8F621BD4B70A9DDBD3C4173";
 
 app.get("/", (req, res) => {
   res.send("Servidor online da Casa Limpa");
