@@ -51,10 +51,16 @@ app.post("/webhook", async (req, res) => {
 
   try {
     const response = await axios.post(
-      `https://api.z-api.io/instances/${instanceId}/token/${token}/send-text`,
+      `https://api.z-api.io/instances/${instanceId}/send-text`,
       {
         phone: telefone,
         message: resposta,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Client-Token': token
+        }
       }
     );
 
